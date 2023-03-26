@@ -32,6 +32,13 @@ export default function weatherReducer(state, { type, payload }) {
 			}
 		}
 
+		case "get_info": {
+			return {
+				...state,
+				weatherInfo: payload,
+			}
+		}
+
 		default:
 			return state
 	}

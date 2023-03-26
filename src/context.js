@@ -18,9 +18,13 @@ export default function WeatherProvider({ children }) {
 		dispatch({ type: "get_hour", payload: offset })
 	}
 
-	useEffect(() => {
-		dispatch({ type: "day_night", payload: state.hour })
-	}, [state.hour])
+	value.getInfo = (data) => {
+		dispatch({ type: "get_info", payload: data })
+	}
+
+	value.dayNight = (hour) => {
+		dispatch({ type: "day_night", payload: hour })
+	}
 
 	useEffect(() => {
 		state.loading = true
@@ -34,18 +38,28 @@ export default function WeatherProvider({ children }) {
 					fetch(get_weather_info(city.city))
 						.then((res) => res.json())
 						.then((data) => {
-							state.weatherInfo = data
+							value.getInfo(data)
 							value.getHour(data.timezone / 60 / 60)
 						})
 				})
 		}
-		console.log(state.weatherInfo)
 
 		navigator.geolocation.getCurrentPosition(success, (err) =>
 			console.error(err)
 		)
 		state.loading = false
 	}, [])
+
+	value.search = (x) => {
+		state.loading = true
+		fetch(get_weather_info(x))
+			.then((res) => res.json())
+			.then((data) => {
+				value.getInfo(data)
+				value.getHour(data.timezone / 60 / 60)
+				state.loading = false
+			})
+	}
 
 	return (
 		<WeatherContext.Provider value={value}>{children}</WeatherContext.Provider>

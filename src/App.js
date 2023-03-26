@@ -2,18 +2,19 @@ import { useContext, useEffect, useState } from "react"
 import { WeatherContext } from "./context"
 
 function App() {
-	const { weatherInfo, hour, bgImg, location, loading } =
+	const { weatherInfo, hour, bgImg, location, loading, dayNight, search } =
 		useContext(WeatherContext)
 
 	const [value, setValue] = useState("")
 
+	useEffect(() => {
+		dayNight(hour)
+	}, [hour])
+
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		search(value)
 	}
-
-	useEffect(() => {
-		console.log(weatherInfo)
-	}, [])
 
 	return (
 		<div
