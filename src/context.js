@@ -45,7 +45,7 @@ export default function WeatherProvider({ children }) {
 						.then((res) => res.json())
 						.then((data) => {
 							value.getInfo(data)
-							value.getHour(data.timezone / 60 / 60)
+							value.getHour(data.timezone / 60)
 							value.getDirection(data.wind.deg)
 							state.toggleLoading(false)
 						})
@@ -63,7 +63,7 @@ export default function WeatherProvider({ children }) {
 			.then((res) => res.json())
 			.then((data) => {
 				value.getInfo(data)
-				value.getHour(data.timezone / 60 / 60)
+				value.getHour(data.timezone / 60)
 				value.getDirection(data.wind.deg)
 				state.toggleLoading(false)
 			})

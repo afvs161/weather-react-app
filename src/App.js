@@ -15,7 +15,10 @@ function App() {
 		arrow,
 		setArrow,
 	} = useContext(WeatherContext)
-	const [value, setValue] = useState("")
+  const [value, setValue] = useState("")
+  let cityDate = new Date(new Date().getTime() + (weatherInfo.timezone / 60 / 60) * 3600 * 1000)
+							.toUTCString()
+							.replace(/ GMT$/, "")
 
 	useEffect(() => {
 		setArrow(direction)
@@ -32,7 +35,7 @@ function App() {
 
 	return (
 		<div
-			className="font-mono grid max-w-sm mx-auto min-h-screen relative text-white pt-8"
+			className="font-mono grid max-w-sm mx-auto min-h-screen relative text-white pt-4"
 			style={{
 				backgroundImage: `url(${bgImg})`,
 				backgroundRepeat: "no-repeat",
@@ -40,7 +43,12 @@ function App() {
 				gridTemplateRows: "100vh auto",
 			}}
 		>
-			<div className="px-4">
+			<div
+				className="px-4 pb-8 grid"
+				style={{
+					gridTemplateRows: "60px 72vh 100px",
+				}}
+			>
 				{/* form */}
 				<form className="text-center mb-4" onSubmit={(e) => handleSubmit(e)}>
 					<input
@@ -54,6 +62,9 @@ function App() {
 
 				{/* top */}
 				<div className="relative">
+					<h2 className="text-lg drop-shadow-[1px_5px_5px_rgba(0,0,0,0.25)] shadow-black">
+						{cityDate.slice(5, 11)}, {cityDate.slice(17, 22)}
+					</h2>
 					<div>
 						<p className="text-3xl font-semibold drop-shadow-[1px_5px_5px_rgba(0,0,0,0.25)] shadow-black">
 							{loading
@@ -76,7 +87,7 @@ function App() {
 				</div>
 
 				{/* middle */}
-				<div className="mx-auto mt-64 [word-spacing:-5px] p-5 flex justify-around text-center bg-slate-400 bg-opacity-30 rounded-xl w-11/12">
+				<div className="mx-auto [word-spacing:-5px] p-5 flex justify-around text-center bg-slate-400 bg-opacity-30 rounded-xl w-11/12">
 					<div>
 						<span className="text-2xl drop-shadow-[1px_5px_5px_rgba(0,0,0,0.25)] shadow-black">
 							{weatherInfo.main && weatherInfo.main.feels_like.toFixed(0)}°C
@@ -106,7 +117,7 @@ function App() {
 			</div>
 
 			{/* bottom */}
-			<div className="bg-emerald-50 [word-spacing:-5px] text-slate-600 w-screen px-4 pb-4">
+			<div className="bg-emerald-50 [word-spacing:-5px] text-slate-600 w-full px-4 pb-4">
 				<p className="capitalize">
 					{weatherInfo.weather && weatherInfo.weather[0].description}
 				</p>
@@ -132,13 +143,15 @@ function App() {
 					</span>
 					<div>
 						<p className="text-xl">
-							{weatherInfo.wind && weatherInfo.wind.speed < 10
+							{weatherInfo.wind && weatherInfo.wind.speed < 14
 								? "Light"
 								: "Heavy"}
 						</p>
 						<p>From {weatherInfo.wind && direction}</p>
 					</div>
 				</div>
+				<hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
+				<h2>sunrise / sunset</h2>
 			</div>
 		</div>
 	)

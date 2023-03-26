@@ -6,12 +6,13 @@ export default function weatherReducer(state, { type, payload }) {
 		case "get_hour": {
 			let d = new Date()
 			let utcHours = d.getUTCHours()
-			let hoursWithOffset = utcHours + payload
+			let hoursWithOffset = utcHours + payload / 60
 			if (hoursWithOffset < 0) {
 				hoursWithOffset += 24
 			} else if (hoursWithOffset > 23) {
 				hoursWithOffset -= 24
 			}
+
 			return {
 				...state,
 				hour: hoursWithOffset,
@@ -61,7 +62,6 @@ export default function weatherReducer(state, { type, payload }) {
 		}
 
 		case "set_arrow": {
-			console.log(payload)
 			const define = () => {
 				switch (payload) {
 					case "North": {
