@@ -9,6 +9,8 @@ let state = {
 	bgImg: null,
 	location: "",
 	loading: false,
+	direction: "",
+	arrow: "☼",
 }
 
 export default function WeatherProvider({ children }) {
@@ -26,8 +28,12 @@ export default function WeatherProvider({ children }) {
 		dispatch({ type: "day_night", payload: hour })
 	}
 
+	value.toggleLoading = (x) => {
+		dispatch({ type: "stop_loading", payload: x })
+	}
+
 	useEffect(() => {
-		state.loading = true
+		state.toggleLoading(true)
 		const success = (position) => {
 			const latitude = position.coords.latitude
 			const longitude = position.coords.longitude
@@ -40,6 +46,8 @@ export default function WeatherProvider({ children }) {
 						.then((data) => {
 							value.getInfo(data)
 							value.getHour(data.timezone / 60 / 60)
+							value.getDirection(data.wind.deg)
+							state.toggleLoading(false)
 						})
 				})
 		}
@@ -47,18 +55,26 @@ export default function WeatherProvider({ children }) {
 		navigator.geolocation.getCurrentPosition(success, (err) =>
 			console.error(err)
 		)
-		state.loading = false
 	}, [])
 
 	value.search = (x) => {
-		state.loading = true
+		state.toggleLoading(true)
 		fetch(get_weather_info(x))
 			.then((res) => res.json())
 			.then((data) => {
 				value.getInfo(data)
 				value.getHour(data.timezone / 60 / 60)
-				state.loading = false
+				value.getDirection(data.wind.deg)
+				state.toggleLoading(false)
 			})
+	}
+
+	value.getDirection = (angle) => {
+		dispatch({ type: "get_directions", payload: angle })
+	}
+
+	value.setArrow = (x) => {
+		dispatch({ type: "set_arrow", payload: x })
 	}
 
 	return (
