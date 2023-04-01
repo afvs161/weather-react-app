@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react"
+import ss from "./assets/ss.jpg"
 import { WeatherContext } from "./context"
 
 function App() {
@@ -14,14 +15,22 @@ function App() {
 		direction,
 		arrow,
 		setArrow,
+		sunrise,
+		sunset,
+		setSS,
 	} = useContext(WeatherContext)
-  const [value, setValue] = useState("")
-  let cityDate = new Date(new Date().getTime() + (weatherInfo.timezone / 60 / 60) * 3600 * 1000)
-							.toUTCString()
-							.replace(/ GMT$/, "")
+
+	const [value, setValue] = useState("")
+
+	let cityDate = new Date(
+		new Date().getTime() + (weatherInfo.timezone / 60 / 60) * 3600 * 1000
+	)
+		.toUTCString()
+		.replace(/ GMT$/, "")
 
 	useEffect(() => {
 		setArrow(direction)
+		setSS()
 	}, [weatherInfo])
 
 	useEffect(() => {
@@ -39,7 +48,7 @@ function App() {
 			style={{
 				backgroundImage: `url(${bgImg})`,
 				backgroundRepeat: "no-repeat",
-				backgroundSize: "cover",
+				backgroundSize: "contain",
 				gridTemplateRows: "100vh auto",
 			}}
 		>
@@ -151,7 +160,18 @@ function App() {
 					</div>
 				</div>
 				<hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
-				<h2>sunrise / sunset</h2>
+				<div
+					className="w-full h-36 mx-auto text-center flex justify-between px-12"
+					style={{
+						backgroundImage: `url(${ss})`,
+						backgroundRepeat: "no-repeat",
+						backgroundSize: "contain",
+						backgroundPosition: "center",
+					}}
+				>
+					<span>{weatherInfo.sys && sunrise}</span>
+					<span>{weatherInfo.sys && sunset}</span>
+				</div>
 			</div>
 		</div>
 	)

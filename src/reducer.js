@@ -33,6 +33,7 @@ export default function weatherReducer(state, { type, payload }) {
 			}
 		}
 
+		// stop loading
 		case "stop_loading": {
 			return {
 				...state,
@@ -40,6 +41,7 @@ export default function weatherReducer(state, { type, payload }) {
 			}
 		}
 
+		// arrow
 		case "get_directions": {
 			let directions = [
 				"North",
@@ -103,6 +105,29 @@ export default function weatherReducer(state, { type, payload }) {
 			return {
 				...state,
 				weatherInfo: payload,
+			}
+		}
+
+		// sunrise, sunset
+		case "sunrise_sunset": {
+			if (state.weatherInfo.sys) {
+				let sunrise = state.weatherInfo.sys.sunrise
+				var date = new Date(sunrise * 1000)
+				var hours = date.getHours()
+				var minutes = "0" + date.getMinutes()
+				var formattedTimeSunrise = hours + ":" + minutes.substr(-2)
+
+				let sunset = state.weatherInfo.sys.sunset
+				var date = new Date(sunset * 1000)
+				var hours = date.getHours()
+				var minutes = "0" + date.getMinutes()
+				var formattedTimeSunset = hours + ":" + minutes.substr(-2)
+			}
+
+			return {
+				...state,
+				sunrise: formattedTimeSunrise,
+				sunset: formattedTimeSunset,
 			}
 		}
 

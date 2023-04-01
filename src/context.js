@@ -11,6 +11,8 @@ let state = {
 	loading: false,
 	direction: "",
 	arrow: "☼",
+	sunrise: 0,
+	sunset: 0,
 }
 
 export default function WeatherProvider({ children }) {
@@ -75,6 +77,10 @@ export default function WeatherProvider({ children }) {
 
 	value.setArrow = (x) => {
 		dispatch({ type: "set_arrow", payload: x })
+	}
+
+	value.setSS = () => {
+		dispatch({ type: "sunrise_sunset" })
 	}
 
 	return (
